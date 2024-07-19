@@ -1,60 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ribbon Chart Example</title>
-    <style>
-        svg {
-            width: 800px;
-            height: 600px;
-        }
-    </style>
-</head>
-<body>
-    <svg id="chart"></svg>
+<html>
+  <head>
+    <title>Sankey Chart Example</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['sankey']});
+      google.charts.setOnLoadCallback(drawChart);
 
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script>
-        const svg = d3.select("#chart")
-            .attr("width", 800)
-            .attr("height", 600);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'From');
+        data.addColumn('string', 'To');
+        data.addColumn('number', 'Weight');
+        data.addRows([
+          ['Channel A', 'Order 1', 5],
+          ['Channel B', 'Order 2', 7],
+          ['Channel A', 'Order 3', 6],
+          ['Channel C', 'Order 4', 2],
+          ['Channel B', 'Order 5', 9]
+        ]);
 
-        const width = +svg.attr("width");
-        const height = +svg.attr("height");
+        var options = {
+          width: 600,
+        };
 
-        // Sample data
-        const data = [
-            {category: 'A', value: 30},
-            {category: 'B', value: 70},
-            {category: 'C', value: 100},
-            {category: 'D', value: 50}
-        ];
-
-        // Define the ribbon chart parameters
-        const radius = Math.min(width, height) / 2;
-        const angle = d3.scaleBand()
-            .domain(data.map(d => d.category))
-            .range([0, 2 * Math.PI])
-            .padding(0.1);
-
-        const arc = d3.arc()
-            .innerRadius(radius - 50)
-            .outerRadius(radius)
-            .startAngle(d => angle(d.category))
-            .endAngle(d => angle(d.category) + angle.bandwidth());
-
-        const ribbon = svg.append("g")
-            .attr("transform", `translate(${width / 2},${height / 2})`);
-
-        ribbon.selectAll("path")
-            .data(data)
-            .enter()
-            .append("path")
-            .attr("d", d => arc(d))
-            .style("fill", (d, i) => d3.schemeCategory10[i])
-            .style("stroke", "#fff")
-            .style("stroke-width", "1px");
+        var chart = new google.visualization.Sankey(document.getElementById('sankey_chart_div'));
+        chart.draw(data, options);
+      }
     </script>
-</body>
+  </head>
+  <body>
+    <div id="sankey_chart_div" style="width: 900px; height: 300px;"></div>
+  </body>
 </html>
