@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sankey Chart Example</title>
+    <title>Sankey Chart Multi-Level Example</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['sankey']});
@@ -13,15 +13,28 @@
         data.addColumn('string', 'To');
         data.addColumn('number', 'Weight');
         data.addRows([
-          ['Channel A', 'Order 1', 5],
-          ['Channel B', 'Order 2', 7],
-          ['Channel A', 'Order 3', 6],
-          ['Channel C', 'Order 4', 2],
-          ['Channel B', 'Order 5', 9]
+          // January
+          ['Channel A', 'January - Order 1', 5],
+          ['Channel B', 'January - Order 2', 7],
+          ['Channel A', 'January - Order 3', 6],
+          // February
+          ['January - Order 1', 'February - Order 1', 5],
+          ['January - Order 2', 'February - Order 2', 7],
+          ['January - Order 3', 'February - Order 3', 6],
+          // March
+          ['February - Order 1', 'March - Order 1', 5],
+          ['February - Order 2', 'March - Order 2', 7],
+          ['February - Order 3', 'March - Order 3', 6],
+          // April
+          ['March - Order 1', 'April - Order 1', 5],
+          ['March - Order 2', 'April - Order 2', 7],
+          ['March - Order 3', 'April - Order 3', 6],
+          // Add more months as needed
         ]);
 
         var options = {
-          width: 600,
+          width: 900,
+          height: 600,
         };
 
         var chart = new google.visualization.Sankey(document.getElementById('sankey_chart_div'));
@@ -30,6 +43,6 @@
     </script>
   </head>
   <body>
-    <div id="sankey_chart_div" style="width: 900px; height: 300px;"></div>
+    <div id="sankey_chart_div" style="width: 900px; height: 600px;"></div>
   </body>
 </html>
