@@ -6,7 +6,7 @@
     <title>Ribbon Chart Example</title>
     <style>
         svg {
-            width: 100%;
+            width: 800px;
             height: 600px;
         }
     </style>
@@ -16,9 +16,12 @@
 
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script>
-        const svg = d3.select("#chart");
-        const width = svg.attr("width");
-        const height = svg.attr("height");
+        const svg = d3.select("#chart")
+            .attr("width", 800)
+            .attr("height", 600);
+
+        const width = +svg.attr("width");
+        const height = +svg.attr("height");
 
         // Sample data
         const data = [
@@ -32,7 +35,8 @@
         const radius = Math.min(width, height) / 2;
         const angle = d3.scaleBand()
             .domain(data.map(d => d.category))
-            .range([0, 2 * Math.PI]);
+            .range([0, 2 * Math.PI])
+            .padding(0.1);
 
         const arc = d3.arc()
             .innerRadius(radius - 50)
