@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sankey Chart Multi-Level Example</title>
+    <title>Sankey Chart for Orders in 2024</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['sankey']});
@@ -13,28 +13,34 @@
         data.addColumn('string', 'To');
         data.addColumn('number', 'Weight');
         data.addRows([
-          // January
-          ['Channel A', 'January - Order 1', 5],
-          ['Channel B', 'January - Order 2', 7],
-          ['Channel A', 'January - Order 3', 6],
-          // February
-          ['January - Order 1', 'February - Order 1', 5],
-          ['January - Order 2', 'February - Order 2', 7],
-          ['January - Order 3', 'February - Order 3', 6],
-          // March
-          ['February - Order 1', 'March - Order 1', 5],
-          ['February - Order 2', 'March - Order 2', 7],
-          ['February - Order 3', 'March - Order 3', 6],
-          // April
-          ['March - Order 1', 'April - Order 1', 5],
-          ['March - Order 2', 'April - Order 2', 7],
-          ['March - Order 3', 'April - Order 3', 6],
+          // January Orders
+          ['Channel A', 'January Order A1', 50],
+          ['Channel B', 'January Order B1', 30],
+          ['Channel C', 'January Order C1', 20],
+          // February Orders
+          ['January Order A1', 'February Order A2', 45],
+          ['January Order B1', 'February Order B2', 25],
+          ['January Order C1', 'February Order C2', 15],
+          ['Channel A', 'February Order A2', 5],  // New orders in February
+          ['Channel B', 'February Order B2', 5],  // New orders in February
+          // March Orders
+          ['February Order A2', 'March Order A3', 40],
+          ['February Order B2', 'March Order B3', 20],
+          ['February Order C2', 'March Order C3', 10],
+          ['Channel A', 'March Order A3', 5],  // New orders in March
+          ['Channel B', 'March Order B3', 5],  // New orders in March
+          // April Orders
+          ['March Order A3', 'April Order A4', 35],
+          ['March Order B3', 'April Order B4', 15],
+          ['March Order C3', 'April Order C4', 5],
+          ['Channel A', 'April Order A4', 5],  // New orders in April
+          ['Channel B', 'April Order B4', 5],  // New orders in April
           // Add more months as needed
         ]);
 
         var options = {
-          width: 900,
-          height: 600,
+          width: 1200,
+          height: 800,
         };
 
         var chart = new google.visualization.Sankey(document.getElementById('sankey_chart_div'));
@@ -43,6 +49,6 @@
     </script>
   </head>
   <body>
-    <div id="sankey_chart_div" style="width: 900px; height: 600px;"></div>
+    <div id="sankey_chart_div" style="width: 1200px; height: 800px;"></div>
   </body>
 </html>
