@@ -1,54 +1,78 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Sankey Chart for Orders in 2024</title>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['sankey']});
-      google.charts.setOnLoadCallback(drawChart);
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ribbon Chart Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        svg {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <svg id="chart"></svg>
 
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'From');
-        data.addColumn('string', 'To');
-        data.addColumn('number', 'Weight');
-        data.addRows([
-          // January Orders
-          ['Channel A', 'January Order A1', 50],
-          ['Channel B', 'January Order B1', 30],
-          ['Channel C', 'January Order C1', 20],
-          // February Orders
-          ['January Order A1', 'February Order A2', 45],
-          ['January Order B1', 'February Order B2', 25],
-          ['January Order C1', 'February Order C2', 15],
-          ['Channel A', 'February Order A2', 5],  // New orders in February
-          ['Channel B', 'February Order B2', 5],  // New orders in February
-          // March Orders
-          ['February Order A2', 'March Order A3', 40],
-          ['February Order B2', 'March Order B3', 20],
-          ['February Order C2', 'March Order C3', 10],
-          ['Channel A', 'March Order A3', 5],  // New orders in March
-          ['Channel B', 'March Order B3', 5],  // New orders in March
-          // April Orders
-          ['March Order A3', 'April Order A4', 35],
-          ['March Order B3', 'April Order B4', 15],
-          ['March Order C3', 'April Order C4', 5],
-          ['Channel A', 'April Order A4', 5],  // New orders in April
-          ['Channel B', 'April Order B4', 5],  // New orders in April
-          // Add more months as needed
-        ]);
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+        const data = [
+            {date: '2024-07-10', sourceA: 10.67, sourceB: 5.17, sourceC: 4.63, sourceD: 4.57, sourceE: 4.51, sourceF: 4.35},
+            {date: '2024-07-11', sourceA: 9.50, sourceB: 5.79, sourceC: 4.66, sourceD: 4.55, sourceE: 4.45, sourceF: 4.12},
+            {date: '2024-07-12', sourceA: 10.00, sourceB: 5.96, sourceC: 4.77, sourceD: 4.39, sourceE: 4.34, sourceF: 4.19},
+            {date: '2024-07-13', sourceA: 8.81, sourceB: 6.28, sourceC: 4.95, sourceD: 4.87, sourceE: 4.49, sourceF: 4.25},
+            {date: '2024-07-14', sourceA: 8.53, sourceB: 5.51, sourceC: 4.73, sourceD: 4.58, sourceE: 4.38, sourceF: 4.16},
+            {date: '2024-07-15', sourceA: 7.53, sourceB: 6.47, sourceC: 4.97, sourceD: 4.80, sourceE: 4.44, sourceF: 4.11},
+            {date: '2024-07-16', sourceA: 7.86, sourceB: 6.51, sourceC: 5.08, sourceD: 5.04, sourceE: 4.39, sourceF: 4.18},
+            {date: '2024-07-17', sourceA: 7.86, sourceB: 6.42, sourceC: 5.60, sourceD: 4.27, sourceE: 4.00, sourceF: 4.00}
+        ];
 
-        var options = {
-          width: 1200,
-          height: 800,
-        };
+        const svg = d3.select("#chart"),
+              margin = {top: 20, right: 20, bottom: 30, left: 50},
+              width = +svg.attr("width") - margin.left - margin.right,
+              height = +svg.attr("height") - margin.top - margin.bottom,
+              g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        var chart = new google.visualization.Sankey(document.getElementById('sankey_chart_div'));
-        chart.draw(data, options);
-      }
+        const parseDate = d3.timeParse("%Y-%m-%d");
+        data.forEach(d => d.date = parseDate(d.date));
+
+        const sources = ["sourceA", "sourceB", "sourceC", "sourceD", "sourceE", "sourceF"];
+        const colors = d3.scaleOrdinal(d3.schemeCategory10).domain(sources);
+
+        const stack = d3.stack().keys(sources);
+        const series = stack(data);
+
+        const x = d3.scaleTime()
+            .domain(d3.extent(data, d => d.date))
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(series, s => d3.max(s, d => d[1]))])
+            .range([height, 0]);
+
+        const area = d3.area()
+            .x(d => x(d.data.date))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]));
+
+        g.selectAll(".layer")
+            .data(series)
+            .enter().append("path")
+            .attr("class", "layer")
+            .attr("d", area)
+            .style("fill", d => colors(d.key));
+
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y));
     </script>
-  </head>
-  <body>
-    <div id="sankey_chart_div" style="width: 1200px; height: 800px;"></div>
-  </body>
+</body>
 </html>
